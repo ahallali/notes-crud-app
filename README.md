@@ -36,9 +36,9 @@ Welcome to the Note App! This project is a simple yet powerful note-taking appli
 
 Start the application using Docker Compose:
 
-bash
-Copier le code
-docker-compose up
+docker-compose up -d
+
+
 Access the application:
 
 After the containers are up, your application will be available at http://localhost:3000.
