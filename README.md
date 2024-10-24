@@ -34,16 +34,16 @@ Welcome to the Note App! This project is a simple yet powerful note-taking appli
    cd notes-crud-app
 
 
-Start the application using Docker Compose:
+2. **Start the application using Docker Compose**:
 
 docker-compose up -d
 
-
-Access the application:
+3. **Access the application using Docker Compose**:
 
 After the containers are up, your application will be available at http://localhost:3000.
 
-Usage
+4. **Usage**:
+
 Sign up or log in to start creating notes.
 Add, edit, and delete notes effortlessly.
 Contributing
