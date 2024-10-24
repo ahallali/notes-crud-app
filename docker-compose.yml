@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  db:
+    image: nouchka/sqlite3
+    container_name: sqlite
+    volumes:
+      - ./dev.db:/app/dev.db
+    command: tail -f /dev/null  # Keep the container running without doing anything
+    ports:
+      - "12345:12345"
+
+volumes:
+  sqlite-data:
+    driver: local
