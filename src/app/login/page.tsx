@@ -32,7 +32,6 @@ const Page = () => {
 
     if (result?.error) {
       setError(result.error);
-      console.log('SignIn Result:', result);
     } else {
       router.push('/dashboard');
     }

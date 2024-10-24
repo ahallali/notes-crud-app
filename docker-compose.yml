@@ -1,15 +1,15 @@
 version: '3.8'
-
 services:
-  db:
-    image: nouchka/sqlite3
-    container_name: sqlite
-    volumes:
-      - ./dev.db:/app/dev.db
-    command: tail -f /dev/null  # Keep the container running without doing anything
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_URL=file:./dev.db
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=ahallali
     ports:
-      - "12345:12345"
+      - "3000:3000"
+    command: sh -c "npm run build && npm start"
 
-volumes:
-  sqlite-data:
-    driver: local
+    
