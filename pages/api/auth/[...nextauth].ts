@@ -12,7 +12,7 @@ declare module "next-auth" {
   }
 }
 const prisma = new PrismaClient();
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 export default NextAuth({
   providers: [
     CredentialsProvider({

@@ -1,0 +1,52 @@
+{
+  "pages": {
+    "/_not-found/page": [
+      "static/chunks/webpack-d950c743a9854657.js",
+      "static/chunks/4bd1b696-2b9665d7b2fa89c2.js",
+      "static/chunks/215-c28ef9d1599dce28.js",
+      "static/chunks/main-app-98549da1e29d16e0.js",
+      "static/chunks/app/_not-found/page-1e044dfb12dca578.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack-d950c743a9854657.js",
+      "static/chunks/4bd1b696-2b9665d7b2fa89c2.js",
+      "static/chunks/215-c28ef9d1599dce28.js",
+      "static/chunks/main-app-98549da1e29d16e0.js",
+      "static/css/a7843cbf88ccb813.css",
+      "static/chunks/998-f7ef503ee9211c8a.js",
+      "static/chunks/app/layout-7499f2f2f809779a.js"
+    ],
+    "/dashboard/page": [
+      "static/chunks/webpack-d950c743a9854657.js",
+      "static/chunks/4bd1b696-2b9665d7b2fa89c2.js",
+      "static/chunks/215-c28ef9d1599dce28.js",
+      "static/chunks/main-app-98549da1e29d16e0.js",
+      "static/chunks/998-f7ef503ee9211c8a.js",
+      "static/chunks/app/dashboard/page-7e3fd1647d8cd07e.js"
+    ],
+    "/login/page": [
+      "static/chunks/webpack-d950c743a9854657.js",
+      "static/chunks/4bd1b696-2b9665d7b2fa89c2.js",
+      "static/chunks/215-c28ef9d1599dce28.js",
+      "static/chunks/main-app-98549da1e29d16e0.js",
+      "static/chunks/998-f7ef503ee9211c8a.js",
+      "static/chunks/301-9b881590921903c6.js",
+      "static/chunks/app/login/page-0baee1a7544979a2.js"
+    ],
+    "/page": [
+      "static/chunks/webpack-d950c743a9854657.js",
+      "static/chunks/4bd1b696-2b9665d7b2fa89c2.js",
+      "static/chunks/215-c28ef9d1599dce28.js",
+      "static/chunks/main-app-98549da1e29d16e0.js",
+      "static/chunks/app/page-0866ab6a929f24b1.js"
+    ],
+    "/register/page": [
+      "static/chunks/webpack-d950c743a9854657.js",
+      "static/chunks/4bd1b696-2b9665d7b2fa89c2.js",
+      "static/chunks/215-c28ef9d1599dce28.js",
+      "static/chunks/main-app-98549da1e29d16e0.js",
+      "static/chunks/301-9b881590921903c6.js",
+      "static/chunks/app/register/page-1e873c2a3ab41c3d.js"
+    ]
+  }
+}
