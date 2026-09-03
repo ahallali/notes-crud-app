@@ -4,26 +4,28 @@ import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 
   interface Note {
-    id: string; 
+    id: number;
     title: string;
     content: string;
-    userId: string; 
+    userId: number;
   }
 
 const Dashboard = () => {
   const { data: session } = useSession();
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState<Note[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [currentNoteId, setCurrentNoteId] = useState('');
+  const [currentNoteId, setCurrentNoteId] = useState<number | null>(null);
+  const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
 
 
   const fetchNotes = async () => {
     if (session) {
-      const userId = session.user.id; 
-      const response = await fetch(`/api/notes?userId=${userId}`);
-      
+
+      const response = await fetch('/api/notes');
+
       if (response.ok) {
         const data = await response.json();
         setNotes(data);
@@ -40,7 +42,7 @@ const Dashboard = () => {
   const resetForm = () => {
     setTitle('');
     setDescription('');
-    setCurrentNoteId('');
+    setCurrentNoteId(null);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -49,10 +51,14 @@ const Dashboard = () => {
       console.error("User is not logged in");
       return;
     }
-    const noteData = { title, content: description, userId: session.user.id }; 
+    const noteData = { title, content: description };
+    setSaving(true);
+    setError('');
+    try {
+    let response: Response;
 
     if (currentNoteId) {
-      await fetch(`/api/notes/${currentNoteId}`, {
+      response = await fetch(`/api/notes/${currentNoteId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +66,7 @@ const Dashboard = () => {
         body: JSON.stringify(noteData),
       });
     } else {
-      await fetch(`/api/notes`, {
+      response = await fetch(`/api/notes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -69,9 +75,12 @@ const Dashboard = () => {
       });
     }
 
+    if (!response.ok) throw new Error('Could not save your note. Your changes are still in the form.');
     resetForm();
-    fetchNotes(); 
+    fetchNotes();
     setIsModalOpen(false);
+    } catch { setError('Could not save your note. Your changes are still in the form.'); }
+    finally { setSaving(false); }
   };
 
   const handleEdit = (note:Note) => {
@@ -81,13 +90,14 @@ const Dashboard = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = async (id:string) => {
+  const handleDelete = async (id:number) => {
     const response = await fetch(`/api/notes/${id}`, {
       method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
     });
 
     if (response.ok) {
-      fetchNotes(); 
+      fetchNotes();
     } else {
       console.error('Failed to delete note:', response.statusText);
     }
@@ -96,6 +106,7 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col w-full h-full">
       <div className="flex-1 p-6 overflow-auto">
+        {error && <p role="alert">{error}</p>}
         <div className="flex justify-between items-center mb-4">
           <button
             onClick={() => {
@@ -108,7 +119,7 @@ const Dashboard = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
           {Array.isArray(notes) && notes.map((note:Note) => (
             <div key={note.id} className="bg-blue-200 p-4 rounded shadow-lg h-52 flex flex-col overflow-hidden">
               <div className="flex-1 overflow-y-auto no-scrollbar max-h-32 w-52">
@@ -132,6 +143,8 @@ const Dashboard = () => {
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
+                  aria-label="Note title"
+                  maxLength={200}
                   placeholder="Title"
                   className="border p-2 mb-2 w-full"
                   required
@@ -139,12 +152,14 @@ const Dashboard = () => {
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
+                  aria-label="Note content"
+                  maxLength={20000}
                   placeholder="Description"
                   className="border p-2 mb-4 w-full"
                   required
                 />
                 <div className="flex justify-end">
-                  <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded mr-2">Save</button>
+                  <button type="submit" disabled={saving} className="bg-blue-600 text-white px-4 py-2 rounded mr-2">Save</button>
                   <button type="button" onClick={() => { resetForm(); setIsModalOpen(false); }} className="bg-gray-400 text-white px-4 py-2 rounded">Cancel</button>
                 </div>
               </form>

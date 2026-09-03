@@ -1,6 +1,7 @@
-import NextAuth from 'next-auth';
+import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { PrismaClient } from '@prisma/client';
+import prisma from './prisma';
+import bcrypt from 'bcryptjs';
 
 
 declare module "next-auth" {
@@ -11,9 +12,9 @@ declare module "next-auth" {
     };
   }
 }
-const prisma = new PrismaClient();
-const bcrypt = require('bcryptjs');
-export default NextAuth({
+
+
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -23,23 +24,24 @@ export default NextAuth({
       },
       async authorize(credentials) {
         if (!credentials) {
-          throw new Error('No credentials provided');
+          return null;
         }
-        const { email, password } = credentials;
+        const email = credentials.email.trim().toLowerCase();
+        const password = credentials.password;
 
         const user = await prisma.user.findUnique({
           where: { email },
-          include : {notes: true}
+          
         });
 
         if (!user) {
-          throw new Error('Invalid email or password');
+          return null;
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) 
         {
-          throw new Error('Invalid email or password');
+          return null;
         }
         return { id: user.id.toString(), email: user.email };
       }
@@ -69,4 +71,4 @@ export default NextAuth({
     }
   },
   secret: process.env.NEXTAUTH_SECRET,
-});
+};
