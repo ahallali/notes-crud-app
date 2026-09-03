@@ -11,7 +11,7 @@ A learning project built with Next.js and TypeScript: a notes dashboard with reg
 
 ## Stack
 
-React, Next.js, TypeScript, Tailwind CSS, NextAuth, Prisma and SQLite. The repository currently uses Next.js 15.0.1 and a React 19 release candidate.
+React, Next.js, TypeScript, Tailwind CSS, NextAuth, Prisma and SQLite. The repository uses Next.js 15.5.25 and React 18.3.1.
 
 ## Run locally
 
@@ -26,6 +26,7 @@ Generate a local authentication secret with `openssl rand -base64 32` and set it
 
 ```sh
 npx prisma generate
+touch prisma/dev.db
 npx prisma migrate deploy
 npm run dev
 ```
@@ -35,15 +36,15 @@ Open [localhost:3000](http://localhost:3000), register a test account and open t
 ## Project structure
 
 - `src/app/` — pages, layouts and dashboard UI.
-- `pages/api/` — authentication and notes API handlers.
+- `src/pages/api/` — authentication and notes API handlers.
 - `src/lib/prisma.ts` — Prisma client.
 - `prisma/schema.prisma` — user and note models.
 - `prisma/migrations/` — database migrations.
 
 ## Current limitations
 
-This is a local learning project, not a production-ready service. The notes API currently accepts user IDs from the client and does not enforce session and ownership checks on the server. Do not use it for private data or deploy it publicly before fixing authorization.
+This is a local learning project, not a production-ready service. The notes API derives ownership from the authenticated server session. Updates and deletes include the owner in the database operation, and browser mutations require a matching Origin and JSON content type. Registration responses omit password hashes.
 
-Next steps are to add those checks and API tests, update the older framework dependencies, and consolidate the duplicate API files. There is no automated test suite yet. The Docker configuration also needs correction and validation; use the local setup above instead.
+Run `npm test` for API authorization and validation tests, and `npm run typecheck` for TypeScript. Inactive duplicate API files have been removed. Next steps before public hosting include distributed rate limiting for authentication, a deployment-appropriate database, and end-to-end authentication tests. The Docker configuration also needs correction and validation; use the local setup above instead.
 
 Generated build output, machine files, environment files and local databases are ignored. The cleanup preserves application code and migrations and does not rewrite repository history.
